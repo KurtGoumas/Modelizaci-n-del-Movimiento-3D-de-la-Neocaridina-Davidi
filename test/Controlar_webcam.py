@@ -38,7 +38,7 @@ h,w,_= frame.shape #Dimensiones de la imagen
 
 formato= cv2.VideoWriter_fourcc(*'mp4v') #Nuestro CODE
 
-out= cv2.VideoWriter('output.mp4', formato, 30, (w,h)) #La salida del vídeo
+out= cv2.VideoWriter('../videos/output.mp4', formato, 30, (w,h)) #La salida del vídeo
 
 #%%% El bucle que seguiremos
 

@@ -1,7 +1,7 @@
-"""
+'''
 Vamos a crear aquí la clase camara para poder, posterioremente, hacer uso de ella 
-en el código principal.
-"""
+en el codigo principal.
+'''
 
 import numpy as np
 import cv2
@@ -9,53 +9,78 @@ import matplotlib.pyplot as plt
 import datetime as dt
 
 class camara:
-    #Atributos de la cámara
+    #Atributos de la camara
     
-    #Ahora creamos algunos de los métodos 
+    #Ahora creamos algunos de los metodos 
     
-    def __init__(self,indice):#Método constructor de la clase
+    def __init__(self,indice):#Metodo constructor de la clase
     
         self.indice= indice
         self.cap = cv2.VideoCapture(self.indice)
+        self.out = None
+        self.cerrando = False
+        self.shape = None
+        self.activa = False
+        self.preparada = False
     
-    def grabar(self):#El método que vamos a usar para grabrar
+    def grabar(self):#El metodo que vamos a usar para grabrar
         
         ret, frame= self.cap.read()
-        
-        h,w,_= frame.shape
-        
-        
-        
-        fecha, out = self.crear_salida()
-        
-        while self.cap.isOpened():
+        self.shape = frame.shape
+        h,w,_= self.shape
+         
+        out = self.crear_salida() #No necesitamos la fecha mas que para la out
+        self.out = out
+        self.preparada = True
+        while self.preparada and not self.activa:
+            print("Esperando a activar")
+            if self.activa:
+                break
+        while self.cap.isOpened() and self.activa and not self.cerrando:
             
-            ret, frame= self.cap.read()#Nos irá leyendo la cámara a cada paso
+            ret, frame= self.cap.read()#Nos ira leyendo la camara a cada paso
     
-            if ret== False:#Si la cámara no está disponible cierra el bucle
+            if ret== False:#Si la camara no esta disponible cierra el bucle
                 break
     
-            cv2.imshow('imagen', frame)#Nos muestra lo que ve la cámara, no es importante
-            #es sólo para saber que funciona, en el programa bueno se puede omitir
+            cv2.imshow(f'Imagen camara [{self.indice}]', frame)#Nos muestra lo que ve la camara, no es importante
+            #es solo para saber que funciona, en el programa bueno se puede omitir
     
-            out.write(frame)#Aquí grabamos el frame en la salida, esto es lo que queremos
+            self.out.write(frame)#Aqui� grabamos el frame en la salida, esto es lo que queremos
     
-            if cv2.waitKey(1)== 27:#si pulsamos la 'escape' se detiene la grabación
+            if cv2.waitKey(1)== 27 or self.cerrando:#si pulsamos la 'escape' se detiene la grabacion
                 break
             
-        self.cerrar(out)          
+        if not self.cerrando:
+            self.cerrar()       
         
     def crear_salida(self):
-        
+        h,w,_ = self.shape
         fecha= dt.datetime.now()
+        path = r'C:\Users\adelu\OneDrive\Escritorio\FisicaAlicante\Año_V\Gambas_con_Alzheimer\Camaras\videos'
+        file = f'{fecha.day}/{fecha.month}/{fecha.year}_{self.indice}.mp4'
         formato= cv2.VideoWriter_fourcc(*'mp4v')
-        out= cv2.VideoWriter('{fecha[0]}/{fecha[1]}/{fecha[2]}_{indice}.mp4', formato, 30, (w,h))
-        return fecha, out
+        
+        out= cv2.VideoWriter(path + file, formato, 30, (w,h))
+        return out
+
+    def activar(self):
+        self.activa = True
+        return True
     
-    def cerrar(self, out):
+    def get_preparada(self):
+        return self.preparada
+
+    def cerrar(self, out=None):
+        self.cerrando = True
+
         self.cap.release()
-        out.release()
+        if out is None:
+            self.out.release()
+        else:
+            out.release()
         cv2.destroyAllWindows()
+        return True
         
         
     

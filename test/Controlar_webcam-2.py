@@ -37,7 +37,7 @@ ret, frame= cap.read()#Para obtener las dimensiones de la imagen, así no habrá
 #que hacerlo a cada paso del bucle
 h,w,_= frame.shape #Dimensiones de la imagen
 
-path= r'C:\Users\adelu\OneDrive\Escritorio\FisicaAlicante\Año_V\Gambas_con_Alzheimer\Camaras\videos'
+path= r'videos'
 #En path es donde ponemos la ruta de la carpeta en la que vamos a guardar los videos
 
 formato= cv2.VideoWriter_fourcc(*'mp4v') #Nuestro CODE

@@ -16,6 +16,7 @@ class camara:
     def __init__(self,indice):#Metodo constructor de la clase
     
         self.indice= indice
+        self.winname = f'Imagen camara [{self.indice+1}]'
         self.cap = cv2.VideoCapture(self.indice)
         self.out = None
         self.cerrando = False
@@ -27,11 +28,11 @@ class camara:
         
         ret, frame= self.cap.read()
         self.shape = frame.shape
-        h,w,_= self.shape
          
         out = self.crear_salida() #No necesitamos la fecha mas que para la out
         self.out = out
         self.preparada = True
+        print(f"Cámara {self.indice+1} preparada")
         while self.preparada and not self.activa:
             print("Esperando a activar")
             if self.activa:
@@ -43,10 +44,10 @@ class camara:
             if ret== False:#Si la camara no esta disponible cierra el bucle
                 break
     
-            cv2.imshow(f'Imagen camara [{self.indice}]', frame)#Nos muestra lo que ve la camara, no es importante
+            cv2.imshow(self.winname, frame)#Nos muestra lo que ve la camara, no es importante
             #es solo para saber que funciona, en el programa bueno se puede omitir
     
-            self.out.write(frame)#Aqui� grabamos el frame en la salida, esto es lo que queremos
+            self.out.write(frame)#Aqui grabamos el frame en la salida, esto es lo que queremos
     
             if cv2.waitKey(1)== 27 or self.cerrando:#si pulsamos la 'escape' se detiene la grabacion
                 break
@@ -57,29 +58,32 @@ class camara:
     def crear_salida(self):
         h,w,_ = self.shape
         fecha= dt.datetime.now()
-        path = r'C:\Users\adelu\OneDrive\Escritorio\FisicaAlicante\Año_V\Gambas_con_Alzheimer\Camaras\videos'
-        file = f'{fecha.day}/{fecha.month}/{fecha.year}_{self.indice}.mp4'
+        path = '../videos/'
+        file = f'{fecha.day}-{fecha.month}-{fecha.year}_{self.indice}.mp4'
         formato= cv2.VideoWriter_fourcc(*'mp4v')
         
         out= cv2.VideoWriter(path + file, formato, 30, (w,h))
         return out
 
     def activar(self):
-        self.activa = True
-        return True
+        self.activa = not self.activa
+        return self.activa
+    
     
     def get_preparada(self):
         return self.preparada
 
     def cerrar(self, out=None):
         self.cerrando = True
+        self.activa = False
+        print("Cerrando camara")
 
-        self.cap.release()
         if out is None:
             self.out.release()
         else:
             out.release()
-        cv2.destroyAllWindows()
+        self.cap.release()
+        cv2.destroyWindow(self.winname)
         return True
         
         

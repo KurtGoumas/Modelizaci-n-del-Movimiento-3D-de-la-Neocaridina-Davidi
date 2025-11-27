@@ -1,6 +1,7 @@
 from control.control import *
 from control.Camara import camara
-from threading import Thread 
+from threading import Thread
+import cv2 
 import time
 
 """
@@ -22,12 +23,9 @@ def main():
 	while not cam2.get_preparada():
 		print("Esperando a cámara 2")
 	cam1.activar()
-	#time.sleep(10) # Autocierre. Por la cara solo sale 1 abe ??¿???¿ pero lo de que la 0 no salga xd
-	#cam1.cerrar()
-	#cam2.cerrar()
-	
-	
-
+	time.sleep(10) # Autocierre. Por la cara solo sale 1 abe ??¿???¿ pero lo de que la 0 no salga xd
+	cam1.cerrar()
+	cam2.cerrar()
 
 if __name__ == "__main__":
 	main()

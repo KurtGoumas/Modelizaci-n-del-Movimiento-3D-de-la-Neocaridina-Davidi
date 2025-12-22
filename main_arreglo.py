@@ -44,6 +44,12 @@ def main():
 
     start_time = time.time()
     while time.time() - start_time < tiempo:
+        grab= time.time()- start_time
+        h= int(grab/3600) 
+        m= int(grab/60) - h*60 
+        s= int(grab)-h*3600-m*60
+
+        print(f'{h}:{m}:{s}')
         if t1.frame is not None:
             cv2.imshow("Camara 1", t1.frame)
         if t2.frame is not None:

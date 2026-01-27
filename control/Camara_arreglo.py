@@ -12,6 +12,7 @@ class Camara:
         self.preparada = False
         self.activa = False
         self.shape = None
+        self.exposicion== 0
 
     def preparar(self):
         """Captura un primer frame válido y prepara el VideoWriter."""
@@ -58,3 +59,9 @@ class Camara:
         if self.cap:
             self.cap.release()
         cv2.destroyAllWindows()
+    def exp_up(self):
+        self.exposicion+= 0.5
+        self.cap.set(cv2.CAP_PROP_EXPOSURE, self.exposicion)
+    def exp_down(self):
+        self.exposicion-= 0.5
+        self.cap.set(cv2.CAP_PROP_EXPOSURE, self.exposicion)

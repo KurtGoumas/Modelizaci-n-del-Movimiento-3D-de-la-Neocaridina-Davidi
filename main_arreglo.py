@@ -56,6 +56,12 @@ def main():
             cv2.imshow("Camara 2", t2.frame)
         if cv2.waitKey(1) == 27:
             break
+        if cv2.waitKey(1)== ord('e'):
+            cam1.exp_up()
+            cam2.exp_up()
+        if cv2.waitKey(1)== ord('q'):
+            cam1.exp_down()
+            cam2.exp_down()
 
     t1.stop()
     t2.stop()

@@ -26,51 +26,55 @@ class CamThread(Thread):
 def main():
 
     indices= listar_indices()
-    tiempo= tiempo_grabacion()
-    cam1 = Camara(indices[0])
-    cam2 = Camara(indices[1])
-
-    cam1.preparar()
-    cam2.preparar()
-
-    cam1.activar()
-    cam2.activar()
-
-    t1 = CamThread(cam1)
-    t2 = CamThread(cam2)
-
-    t1.start()
-    t2.start()
-
+    tiempo, intervalo_grabacion= tiempo_grabacion()
     start_time = time.time()
     while time.time() - start_time < tiempo:
-        grab= time.time()- start_time
-        h= int(grab/3600) 
-        m= int(grab/60) - h*60 
-        s= int(grab)-h*3600-m*60
+        cam1 = Camara(indices[0])
+        #cam2 = Camara(indices[1])
 
-        print(f'{h}:{m}:{s}')
-        if t1.frame is not None:
-            cv2.imshow("Camara 1", t1.frame)
-        if t2.frame is not None:
-            cv2.imshow("Camara 2", t2.frame)
-        if cv2.waitKey(1) == 27:
-            break
-        if cv2.waitKey(1)== ord('e'):
-            cam1.exp_up()
-            cam2.exp_up()
-        if cv2.waitKey(1)== ord('q'):
-            cam1.exp_down()
-            cam2.exp_down()
+        cam1.preparar()
+        #cam2.preparar()
 
-    t1.stop()
-    t2.stop()
-    t1.join()
-    t2.join()
+        cam1.activar()
+        #cam2.activar()
 
-    cam1.cerrar()
-    cam2.cerrar()
-    cv2.destroyAllWindows()
+        t1 = CamThread(cam1)
+        #t2 = CamThread(cam2)
+
+        t1.start()
+        #t2.start()
+
+        start_ciclo = time.time()
+    
+        while time.time() - start_ciclo < intervalo_grabacion:
+    
+            grab= time.time()- start_time
+            h= int(grab/3600) 
+            m= int(grab/60) - h*60 
+            s= int(grab)-h*3600-m*60
+
+            print(f'{h}:{m}:{s}')
+            if t1.frame is not None:
+                cv2.imshow("Camara 1", t1.frame)
+            if t2.frame is not None:
+                cv2.imshow("Camara 2", t2.frame)
+            if cv2.waitKey(1) == 27:
+                break
+            if cv2.waitKey(1)== ord('e'):
+                cam1.exp_up()
+                cam2.exp_up()
+            if cv2.waitKey(1)== ord('q'):
+                cam1.exp_down()
+                cam2.exp_down()
+    
+        t1.stop()
+        t2.stop()
+        t1.join()
+        t2.join()
+
+        cam1.cerrar()
+        cam2.cerrar()
+        cv2.destroyAllWindows()
     print("Programa finalizado")
 
 if __name__ == "__main__":

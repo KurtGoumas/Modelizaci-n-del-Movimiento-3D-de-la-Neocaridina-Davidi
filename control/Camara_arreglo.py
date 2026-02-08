@@ -10,10 +10,13 @@ class Camara:
         self.cap = cv2.VideoCapture(self.indice)
         self.out = None
         self.preparada = False
+        self.filename= None
         self.activa = False
         self.shape = None
-        self.exposicion= 0
-        self.ganancia= 0
+        self.fps= 30
+        self.fourcc= None #El codec
+        self.exposicion= self.cap.get(cv2.CAP_PROP_EXPOSURE)
+        self.ganancia= self.cap.get(cv2.CAP_PROP_GAIN)
 
     def preparar(self):
         """Captura un primer frame válido y prepara el VideoWriter."""
@@ -35,9 +38,9 @@ class Camara:
         if not os.path.exists('./videos'):
             os.makedirs('./videos')
         fecha = dt.datetime.now()
-        filename = f'videos/{fecha.day}-{fecha.month}-{fecha.year}-{fecha.hour}-{fecha.minute}-{fecha.second}_{self.indice}.mp4'
-        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        return cv2.VideoWriter(filename, fourcc, 30, (w, h))
+        self.filename = f'videos/{fecha.day}-{fecha.month}-{fecha.year}-{fecha.hour}-{fecha.minute}-{fecha.second}_{self.indice}'
+        self.fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        return cv2.VideoWriter(self.filename + '.mp4', self.fourcc, self.fps, (w, h))
 
     def activar(self):
         self.activa = True
@@ -60,15 +63,20 @@ class Camara:
         if self.cap:
             self.cap.release()
         cv2.destroyAllWindows()
+
     def exp_up(self):
         self.exposicion+= 0.5
         self.cap.set(cv2.CAP_PROP_EXPOSURE, self.exposicion)
+
     def exp_down(self):
         self.exposicion-= 0.5
         self.cap.set(cv2.CAP_PROP_EXPOSURE, self.exposicion)
+
     def gain_up(self):
         self.ganancia+=1
         self.cap.set(cv2.CAP_PROP_GAIN,self.ganancia)
+
     def gain_up(self):
         self.ganancia-=1
         self.cap.set(cv2.CAP_PROP_GAIN,self.ganancia)
+    

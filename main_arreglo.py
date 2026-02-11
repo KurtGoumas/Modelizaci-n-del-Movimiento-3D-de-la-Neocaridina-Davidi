@@ -13,15 +13,17 @@ class CamThread(Thread):
         self.frame = None
         self.running = True
         self.Contador_Frames= 0
+        self.Prom_fps= 0
 
     def run(self):
         while self.running:
             ret, frame = self.cam.cap.read()
-            self.Contador_Frames += 1
             if ret:
                 self.frame = frame
                 self.cam.out.write(frame)
-                MetadatosIteracionCamara= MetadatosIteracion(self.cam.filename,self.cam,self)           
+                MetadatosIteracionCamara= MetadatosIteracion(self.cam.filename,self.cam,self)
+                self.Prom_fps+= self.cam.fps 
+                self.Contador_Frames += 1           
 
     def stop(self):
         self.running = False
@@ -90,8 +92,8 @@ def main():
                 cam1.exp_down()
                 #cam2.exp_down()
 
-        MetadatosFinalesCamara1= MetadatosGlobalesFinales(cam1.filename)
-        #MetadatosFinalesCamara2= MetadatosGlobalesFinales(cam2.filename)
+        MetadatosFinalesCamara1= MetadatosGlobalesFinales(t1)
+        #MetadatosFinalesCamara2= MetadatosGlobalesFinales(t2)
 
         Promedio_fps1+= MetadatosFinalesCamara1[0]
         #Promedio_fps2+=MetadatosFinalesCamara2[0]
@@ -113,8 +115,8 @@ def main():
     Promedio_fps1= Promedio_fps1/Frames1
     #Promedio_fps2= Promedio_fps2/Frames2
 
-    print('Promedio de fps: ', Promedio_fps1)
-    print('Frames totales: ', Frames1)
+    Resumen1= Resumen_final(MetadatosGLobalesCamara1 ,Promedio_fps1,Frames1)
+    #Resumen2= Resumen_final(MetadatosGLobalesCamara2 ,Promedio_fps2,Frames2)
     print("Programa finalizado")
 
 if __name__ == "__main__":

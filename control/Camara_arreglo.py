@@ -13,7 +13,7 @@ class Camara:
         self.filename= None
         self.activa = False
         self.shape = None
-        self.fps= 30
+        self.fps= self.cap.get(cv2.CAP_PROP_FPS)
         self.fourcc= None #El codec
         self.exposicion= self.cap.get(cv2.CAP_PROP_EXPOSURE)
         self.ganancia= self.cap.get(cv2.CAP_PROP_GAIN)
@@ -40,6 +40,7 @@ class Camara:
         fecha = dt.datetime.now()
         self.filename = f'videos/{fecha.day}-{fecha.month}-{fecha.year}-{fecha.hour}-{fecha.minute}-{fecha.second}_{self.indice}'
         self.fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        self.fps= self.cap.get(cv2.CAP_PROP_FPS)
         return cv2.VideoWriter(self.filename + '.mp4', self.fourcc, self.fps, (w, h))
 
     def activar(self):

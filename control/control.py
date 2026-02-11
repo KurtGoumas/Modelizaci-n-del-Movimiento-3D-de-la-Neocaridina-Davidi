@@ -27,15 +27,19 @@ def MetadatosGlobalesIniciales(Nombre, camara):
 
     return Nombre
 
-def MetadatosGlobalesFinales(Nombre):
-    with open(Nombre + '.csv', newline='') as file:
-        lector = csv.reader(file, delimiter = ' ',dialect='excel', quotechar='|')
-        suma_fps= 0
-        contador= 0
-        for row in lector:
-            suma_fps+= int(row[3])
-            contador+= 1 #Entiendo que el contador vale por el número de frames
-    return suma_fps,contador
+def Resumen_final(Nombre, fps, frames):
+    with open(Nombre + '.csv', 'a', newline='') as file:
+        formato = csv.writer(file, delimiter = ' ',dialect='excel', quotechar='|' ,quoting=csv.QUOTE_ALL)
+        lista= [f'{fps}',f'{frames}']
+        formato.writerow(lista)
+
+    return Nombre
+
+def MetadatosGlobalesFinales(hilo):
+    fps_suma= hilo.Prom_fps
+    Frames= hilo.Contador_Frames
+    return fps_suma, Frames
+
 
 def MetadatosIteracion(Nombre,camara,hilo):
     with open(Nombre + '.csv', 'a', newline='') as file:

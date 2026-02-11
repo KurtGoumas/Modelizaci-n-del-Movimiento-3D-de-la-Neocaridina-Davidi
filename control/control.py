@@ -37,7 +37,6 @@ def MetadatosGlobalesFinales(Nombre):
             contador+= 1 #Entiendo que el contador vale por el número de frames
     return suma_fps,contador
 
-
 def MetadatosIteracion(Nombre,camara,hilo):
     with open(Nombre + '.csv', 'a', newline='') as file:
         formato = csv.writer(file, delimiter = ' ',dialect='excel', quotechar='|' ,quoting=csv.QUOTE_ALL)

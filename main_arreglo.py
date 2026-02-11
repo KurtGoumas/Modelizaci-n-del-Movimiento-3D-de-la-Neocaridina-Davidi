@@ -109,6 +109,12 @@ def main():
         cv2.destroyAllWindows()
     cam1.cerrar()
     #cam2.cerrar()
+
+    Promedio_fps1= Promedio_fps1/Frames1
+    #Promedio_fps2= Promedio_fps2/Frames2
+
+    print('Promedio de fps: ', Promedio_fps1)
+    print('Frames totales: ', Frames1)
     print("Programa finalizado")
 
 if __name__ == "__main__":

@@ -19,13 +19,24 @@ def tiempo_grabacion():
     intervalo= intervalos_minutos*60 + intervalos_segundos
     return tiempo,intervalo
 
-def MetadatosGlobales(Nombre, camara):
+def MetadatosGlobalesIniciales(Nombre, camara):
     with open(Nombre + '.csv', 'w', newline='') as file:
         formato = csv.writer(file, delimiter = ' ',dialect='excel', quotechar='|' ,quoting=csv.QUOTE_ALL)
         lista= [f'{camara.shape}',f'{camara.fourcc}']
         formato.writerow(lista)
 
-    return True
+    return Nombre
+
+def MetadatosGlobalesFinales(Nombre):
+    with open(Nombre + '.csv', newline='') as file:
+        lector = csv.reader(file, delimiter = ' ',dialect='excel', quotechar='|')
+        suma_fps= 0
+        contador= 0
+        for row in lector:
+            suma_fps+= int(row[3])
+            contador+= 1 #Entiendo que el contador vale por el número de frames
+    return suma_fps,contador
+
 
 def MetadatosIteracion(Nombre,camara,hilo):
     with open(Nombre + '.csv', 'a', newline='') as file:

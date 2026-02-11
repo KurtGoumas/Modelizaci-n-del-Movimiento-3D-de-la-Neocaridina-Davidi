@@ -63,6 +63,12 @@ class Camara:
         if self.cap:
             self.cap.release()
         cv2.destroyAllWindows()
+    
+    def cerrar_salida(self):#Esto sólo cierra la salida y permite crear una nueva
+        print('Cerrando vídeo')
+        if self.out:
+            self.out.release
+        cv2.destroyAllWindows()
 
     def exp_up(self):
         self.exposicion+= 0.5

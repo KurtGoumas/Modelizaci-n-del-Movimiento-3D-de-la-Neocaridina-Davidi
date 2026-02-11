@@ -21,8 +21,7 @@ class CamThread(Thread):
             if ret:
                 self.frame = frame
                 self.cam.out.write(frame)
-                MetadatosIteracionCamara= MetadatosIteracion(self.cam.filename,self.cam,self)
-            
+                MetadatosIteracionCamara= MetadatosIteracion(self.cam.filename,self.cam,self)           
 
     def stop(self):
         self.running = False
@@ -31,7 +30,7 @@ def main():
 
     indices= listar_indices()
     tiempo, intervalo_grabacion= tiempo_grabacion()
-
+    
     cam1 = Camara(indices[0])#Esto lo abrimos inicialmente para obtener los metadatos globales
     #cam2 = Camara(indices[1])
     cam1.preparar()
@@ -41,8 +40,15 @@ def main():
     #cam2.activar()
 
     t1 = CamThread(cam1)
-     #t2 = CamThread(cam2)
-    MetadatosGLobalesCamara1= MetadatosGlobales(cam1.filename, cam1)
+    #t2 = CamThread(cam2)
+
+    MetadatosGLobalesCamara1= MetadatosGlobalesIniciales(cam1.filename, cam1)
+    #MetadatosGLobalesCamara2= MetadatosGlobalesIniciales(cam2.filename, cam2)
+
+    Promedio_fps1= 0
+    #Promedio_fps2= 0
+    Frames1= 0
+    #Frames2= 0
 
     start_time = time.time()
     while time.time() - start_time < tiempo:
@@ -83,15 +89,26 @@ def main():
             if cv2.waitKey(1)== ord('q'):
                 cam1.exp_down()
                 #cam2.exp_down()
-    
+
+        MetadatosFinalesCamara1= MetadatosGlobalesFinales(cam1.filename)
+        #MetadatosFinalesCamara2= MetadatosGlobalesFinales(cam2.filename)
+
+        Promedio_fps1+= MetadatosFinalesCamara1[0]
+        #Promedio_fps2+=MetadatosFinalesCamara2[0]
+
+        Frames1+= MetadatosFinalesCamara1[1]
+        #Frames2+= MetadatosFinalesCamara2[1]
+
         t1.stop()
         #t2.stop()
         t1.join()
         #t2.join()
 
-        cam1.cerrar()
-        #cam2.cerrar()
+        cam1.cerrar_salida()
+        #cam2.cerrar_salida()
         cv2.destroyAllWindows()
+    cam1.cerrar()
+    #cam2.cerrar()
     print("Programa finalizado")
 
 if __name__ == "__main__":

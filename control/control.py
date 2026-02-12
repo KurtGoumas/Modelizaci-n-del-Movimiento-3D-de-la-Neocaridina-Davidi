@@ -47,6 +47,6 @@ def MetadatosIteracion(Nombre,camara,hilo):
         lista= [f'{hilo.Contador_Frames}', 
                 f'{dt.datetime.now().hour}-{dt.datetime.now().minute}-{dt.datetime.now().second}',
                 f'{time.time()-hilo.comienzo}', 
-                f'{camara.fps}', f'{camara.exposicion}', f'{camara.ganancia}', f'{camara.cap.get(cv2.CAP_PROP_BITRATE)}', 'WB']
+                f'{hilo.fps_real}', f'{camara.exposicion}', f'{camara.ganancia}', f'{camara.cap.get(cv2.CAP_PROP_BITRATE)}', 'WB']
         formato.writerow(lista)
     return True

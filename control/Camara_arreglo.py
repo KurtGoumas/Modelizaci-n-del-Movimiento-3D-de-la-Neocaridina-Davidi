@@ -83,7 +83,7 @@ class Camara:
         self.ganancia+=1
         self.cap.set(cv2.CAP_PROP_GAIN,self.ganancia)
 
-    def gain_up(self):
+    def gain_down(self):
         self.ganancia-=1
         self.cap.set(cv2.CAP_PROP_GAIN,self.ganancia)
     

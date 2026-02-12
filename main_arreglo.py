@@ -7,9 +7,10 @@ import time
 
 
 class CamThread(Thread):
-    def __init__(self, camara):
+    def __init__(self, camara, start):
         super().__init__()
         self.cam = camara
+        self.comienzo= start
         self.frame = None
         self.running = True
         self.Contador_Frames= 0
@@ -41,7 +42,7 @@ def main():
     cam1.activar()
     #cam2.activar()
 
-    t1 = CamThread(cam1)
+    #t1 = CamThread(cam1)
     #t2 = CamThread(cam2)
 
     MetadatosGLobalesCamara1= MetadatosGlobalesIniciales(cam1.filename, cam1)
@@ -63,8 +64,8 @@ def main():
         cam1.activar()
         #cam2.activar()
 
-        t1 = CamThread(cam1)
-        #t2 = CamThread(cam2)
+        t1 = CamThread(cam1,start_time)
+        #t2 = CamThread(cam2,start_time)
 
         t1.start()
         #t2.start()
@@ -91,6 +92,12 @@ def main():
             if cv2.waitKey(1)== ord('q'):
                 cam1.exp_down()
                 #cam2.exp_down()
+            if cv2.waitKey(1)== ord('a'):
+                cam1.gain_up()
+                #cam2.gain_up()
+            if cv2.waitKey(1)== ord('d'):
+                cam1.gain_down()
+                #cam2.gain_down()
 
         MetadatosFinalesCamara1= MetadatosGlobalesFinales(t1)
         #MetadatosFinalesCamara2= MetadatosGlobalesFinales(t2)

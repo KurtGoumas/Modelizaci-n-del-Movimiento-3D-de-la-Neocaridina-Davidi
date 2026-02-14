@@ -50,11 +50,11 @@ def main():
     cam1.activar()
     #cam2.activar()
 
-    #t1 = CamThread(cam1)
-    #t2 = CamThread(cam2)
-
     MetadatosGLobalesCamara1= MetadatosGlobalesIniciales(cam1.filename, cam1)
     #MetadatosGLobalesCamara2= MetadatosGlobalesIniciales(cam2.filename, cam2)
+
+    cam1.cerrar_salida()
+    #cam2.cerrar_salida()
 
     Promedio_fps1= 0
     #Promedio_fps2= 0
@@ -63,14 +63,9 @@ def main():
 
     start_time = time.time()
     while time.time() - start_time < tiempo:
-        cam1 = Camara(indices[0])
-        #cam2 = Camara(indices[1])
 
-        cam1.preparar()
-        #cam2.preparar()
-
-        cam1.activar()
-        #cam2.activar()
+        cam1.crear_salida()
+        #cam2.crear_salida()
 
         t1 = CamThread(cam1,start_time)
         #t2 = CamThread(cam2,start_time)

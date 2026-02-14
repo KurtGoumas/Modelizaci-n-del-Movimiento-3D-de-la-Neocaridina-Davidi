@@ -3,8 +3,9 @@ import time
 import datetime as dt
 import csv
 
-def listar_indices(max=10):
+def listar_indices(max=2):
     l = [i for i in range(max) if cv2.VideoCapture(i).isOpened() and cv2.VideoCapture(i).release() is None]
+
     return l
 
 def tiempo_grabacion():
@@ -20,7 +21,7 @@ def tiempo_grabacion():
     return tiempo,intervalo
 
 def MetadatosGlobalesIniciales(Nombre, camara):
-    with open(Nombre + '.csv', 'w', newline='') as file:
+    with open(Nombre + '_globales' + '.csv', 'w', newline='') as file:
         formato = csv.writer(file, delimiter = ' ',dialect='excel', quotechar='|' ,quoting=csv.QUOTE_ALL)
         lista= [f'{camara.shape}',f'{camara.fourcc}']
         formato.writerow(lista)
@@ -28,7 +29,7 @@ def MetadatosGlobalesIniciales(Nombre, camara):
     return Nombre
 
 def Resumen_final(Nombre, fps, frames):
-    with open(Nombre + '.csv', 'a', newline='') as file:
+    with open(Nombre + '_globales' + '.csv', 'a', newline='') as file:
         formato = csv.writer(file, delimiter = ' ',dialect='excel', quotechar='|' ,quoting=csv.QUOTE_ALL)
         lista= [f'{fps}',f'{frames}']
         formato.writerow(lista)
